@@ -58,7 +58,7 @@ public class TableFormatter<T> {
         }
         
         String fmt(int width) { // create a format string with the right width and justification
-            return String.format("%%%s%ds", justification == Justification.LEFT ? "-" : "", width);
+            return String.format("%%%s%ds", justification == Justification.LEFT ? "-" : "", Math.max(width, 1));
         }
         
         String renderTitle(int width) {
