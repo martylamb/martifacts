@@ -1,0 +1,68 @@
+#!/bin/bash
+
+URL="http://127.0.0.1:4567"
+CURL=curl
+ACCEPT="text/plain"
+
+function showHelp() {
+    cat <<EOF
+USAGE: martifact -h/--help
+       martifact [-j] add FILE [TAG...]
+       martifact get ID [LOCALFILE]
+       martifact [-j] tags
+       martifact [-j] search [TAG|ID|HASH|DATERANGE...]
+EOF
+}
+
+function usageAndExit() {
+	showHelp >&2
+	exit 1
+}
+
+function doAdd() {
+	[ $# -eq 0 ] && usageAndExit
+	FILE=$1
+	shift
+	$CURL -H "Accept: $ACCEPT" -F "file=@$FILE" -F "filetime=`date -r $FILE '+%s000'`" -F "tags=$*" ${URL}/add
+}
+
+function doGet() {
+	[ $# -gt 2 ] && usageAndExit
+	ID=$1
+	[ $# -eq 2 ] && CURLARGS="-o $2" || CURLARGS="-JO"
+	$CURL -H "Accept: $ACCEPT" $CURLARGS ${URL}/get/$ID
+}
+
+function doSearch() {
+	$CURL -H "Accept: $ACCEPT" -G --data-urlencode "q=$*" ${URL}/search
+}
+
+function processArgs() {
+	[ $# -eq 0 ] && usageAndExit
+	case $1 in
+		-j) ACCEPT="application/json"
+			shift
+			processArgs $*
+			;;
+			
+		-h,--help) showHelp
+				   ;;
+				   
+		add) shift
+			 doAdd $*
+			 ;;
+			 
+		get) shift
+			 doGet $*
+			 ;;
+			 			  
+		search) shift
+				doSearch $*
+				;;
+
+		*) usageAndExit
+		   ;;
+	esac
+}
+
+processArgs $*
