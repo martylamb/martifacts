@@ -44,10 +44,6 @@ public class ArtifactSearcher {
         // no search params means "give me everything!"
         if (queryHashes.isEmpty() && queryIds.isEmpty() && queryTags.isEmpty()) return ArtifactResponse.of(_store.all());
         
-        System.out.format("%d ids\n", queryIds.size());
-        System.out.format("%d hashes\n", queryHashes.size());
-        System.out.format("%d tags\n", queryTags.size());
-
         // search by hash or ID means "include all matches in result"  (then filtered to only include any specified tags)
         if (!queryHashes.isEmpty() || !queryIds.isEmpty()) {
             Map<String, Artifact> resultsById = new java.util.HashMap<>();
@@ -57,7 +53,6 @@ public class ArtifactSearcher {
                 queryIds.stream().map(i -> _store.findById(i)).filter(oi -> oi.isPresent()).map(oa -> oa.get())
             ).forEach(a -> resultsById.put(a.id(), a));
             
-            System.out.format("after hashes and ids: %d results\n", resultsById.size());
             if (queryTags.isEmpty()) {
                 return ArtifactResponse.of(resultsById.values());
             } else { // use tags as a filter
