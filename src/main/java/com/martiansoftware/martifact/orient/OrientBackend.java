@@ -35,15 +35,24 @@ class OrientBackend extends OrientSupport {
                 sql("create index Tag.name NOTUNIQUE");
 
                 sql("create class Artifact");
+                
                 sql("create property Artifact.uuid string");
                 sql("alter property Artifact.uuid MANDATORY true");
                 sql("create index Artifact.uuid UNIQUE");
+                
                 sql("create property Artifact.name string");
+                sql("create index Artifact.name NOTUNIQUE");
+                
                 sql("create property Artifact.sha1 string"); // TODO: more indexes and mandatories (and validations?)
+                sql("create index Artifact.sha1 NOTUNIQUE");
+                
                 sql("create property Artifact.size long");
                 sql("create property Artifact.time datetime");
                 sql("create property Artifact.added datetime");
+                
                 sql("create property Artifact.tags linkset Tag");
+                sql("create index Artifact.tags NOTUNIQUE");
+                
                 System.out.println("Finished defining schema.\n");
             } else System.out.println("Schema already defined.\n");
         });
@@ -159,7 +168,9 @@ class OrientBackend extends OrientSupport {
     public List<ODocument> findArtifactDocsWithAllTags(Collection<String> tags) {
         return tx(() -> {
             Collection<String> ntags = Tags.normalize(tags);
-            String q = "select from Artifact where " + ntags.stream().map(t -> "tags contains (name = ?) ").collect(Collectors.joining("AND "));
+            List<ODocument> tagDocs = getTagDocsFor(tags);
+            if (tagDocs.isEmpty()) return Collections.EMPTY_LIST;
+            String q = "select from Artifact where " + tagDocs.stream().map(t -> "tags contains " + t.getIdentity() + " ").collect(Collectors.joining("AND "));
             return Collections.unmodifiableList(sql(q, (Object[]) ntags.toArray(new String[ntags.size()])));
         });
     }
