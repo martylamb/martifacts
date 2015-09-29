@@ -14,7 +14,7 @@ public class App {
     private static OrientArtifactStore _store;
 
     public static void main(String[] args) throws Exception {
-        _store = new OrientArtifactStore(Paths.get(System.getProperty("user.home")).resolve(".martifact"));
+        _store = new OrientArtifactStore(Paths.get(System.getProperty("user.home")).resolve(".martifacts"));
 
         post("/add", new ArtifactAdder(_store)::add);
         get("/get/:id", new ArtifactGetter(_store)::get);
