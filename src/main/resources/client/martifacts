@@ -1,6 +1,8 @@
 #!/bin/bash
 
-URL="http://127.0.0.1:4567"
+# URL = the main url for the martifacts application
+URL=
+
 CURL=curl
 ACCEPT="text/plain"
 
@@ -10,7 +12,10 @@ USAGE: martifact -h/--help
        martifact [-j] add FILE [TAG...]
        martifact get ID [LOCALFILE]
        martifact [-j] tags
-       martifact [-j] search [TAG|ID|HASH|DATERANGE...]
+       martifact [-j] search [TAG|ID|HASH...]
+       
+   -j  response should be in JSON format
+   
 EOF
 }
 

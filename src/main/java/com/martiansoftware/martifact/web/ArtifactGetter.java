@@ -5,6 +5,7 @@ import static com.martiansoftware.boom.Boom.halt;
 import static com.martiansoftware.boom.Boom.request;
 import static com.martiansoftware.boom.Boom.response;
 import com.martiansoftware.boom.BoomResponse;
+import com.martiansoftware.boom.MimeType;
 import com.martiansoftware.martifact.Artifact;
 import java.io.IOException;
 import java.util.Optional;
@@ -24,6 +25,6 @@ public class ArtifactGetter {
         if (!oa.isPresent()) halt(404);
         Artifact a = oa.get();
         response().header("Content-Disposition", String.format("inline; filename=\"%s\"", a.name()));        
-        return new BoomResponse(a.inputStream());
+        return new BoomResponse(a.inputStream()).as(MimeType.BIN);
     }
 }

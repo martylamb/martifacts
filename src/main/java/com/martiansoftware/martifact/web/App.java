@@ -19,5 +19,6 @@ public class App {
         post("/add", new ArtifactAdder(_store)::add);
         get("/get/:id", new ArtifactGetter(_store)::get);
         get("/search", new ArtifactSearcher(_store)::search);
+        get("/client", new ClientGetter()::getClient);
     }
 }
