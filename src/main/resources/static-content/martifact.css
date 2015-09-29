@@ -1,0 +1,46 @@
+body {
+    margin: 0 auto;
+    padding: 0 2em;
+    max-width: 800px;
+    margin-bottom: 50px;
+    line-height: 1.6em;
+}
+
+.help {
+    color: #adadad;
+}
+
+.sha1 {
+    color: #adadad;
+    font-size: 90%;
+}
+
+.tag {
+    margin: 0 0.1em;
+    padding: 0.3em 1em;
+    color: #fff;
+    background: #999;
+    font-size: 80%;
+}
+
+.table-filename {
+    text-align: left;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.table-size {
+    text-align: right;
+    vertical-align: top;
+}
+
+.table-tags {
+    text-align: left;
+    vertical-align: top;    
+}
+
+.footer {
+    text-align: right;
+    margin-top: 1em;
+    border-top: 1px solid #adadad;
+}
