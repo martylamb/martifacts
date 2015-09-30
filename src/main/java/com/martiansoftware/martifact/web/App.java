@@ -27,13 +27,22 @@ public class App {
         System.exit(exitCode);
     }
     
-    private static void launch(Path dataDir) throws Exception {
-        log.info("Starting server with data in {}", dataDir);
-        _store = new OrientArtifactStore(dataDir);
-        post("/add", new ArtifactAdder(_store)::add);
-        get("/get/:id", new ArtifactGetter(_store)::get);
-        get("/search", new ArtifactSearcher(_store)::search);
-        get("/client", new ClientGetter()::getClient);        
+    private static Throwable rootCauseOf(Throwable t) {
+        while (t.getCause() != null) t = t.getCause();
+        return t;
+    }
+    
+    private static void launch(Path dataDir) {
+        try {
+            log.info("Starting server with data in {}", dataDir);
+            _store = new OrientArtifactStore(dataDir);
+            post("/add", new ArtifactAdder(_store)::add);
+            get("/get/:id", new ArtifactGetter(_store)::get);
+            get("/search", new ArtifactSearcher(_store)::search);
+            get("/client", new ClientGetter()::getClient);        
+        } catch (Exception e) {
+            log.error("Unable to launch server: {}", rootCauseOf(e).getLocalizedMessage());
+        }
     }
     
     public static void main(String[] args) throws Exception {

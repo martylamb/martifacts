@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
  * @author mlamb
  */
 class OrientSupport {
+    
     private final Path _dbPath;
     private final OPartitionedDatabasePool _pool;
     private static final Logger log = LoggerFactory.getLogger(OrientSupport.class);

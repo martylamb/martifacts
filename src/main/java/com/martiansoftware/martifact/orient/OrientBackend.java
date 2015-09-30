@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * based on examples from https://groups.google.com/forum/#!msg/orient-database/UjDJPtmvJDc/TaAqtxvUMMgJ
@@ -21,6 +23,8 @@ import java.util.UUID;
  */
 class OrientBackend extends OrientSupport {
 
+    private static final Logger log = LoggerFactory.getLogger(OrientBackend.class);
+    
     // TODO: fewer string magic text.  maybe a template processor inside sql
     //       calls?  need to avoid just concatenating strings.
     public OrientBackend(Path path) throws IOException {
@@ -28,7 +32,7 @@ class OrientBackend extends OrientSupport {
 
         noTx(() -> {            
             if (db().getMetadata().getSchema().getClass("Tag") == null) {
-                System.out.println("Defining schema");
+                log.info("Defining schema");
                 sql("create class Tag");
                 sql("create property Tag.name string");
                 sql("alter property Tag.name MANDATORY true");
@@ -53,8 +57,8 @@ class OrientBackend extends OrientSupport {
                 sql("create property Artifact.tags linkset Tag");
                 sql("create index Artifact.tags NOTUNIQUE");
                 
-                System.out.println("Finished defining schema.\n");
-            } else System.out.println("Schema already defined.\n");
+                log.info("Finished defining schema.\n");
+            } else log.info("Schema already defined.\n");
         });
     }
 
