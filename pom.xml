@@ -40,7 +40,18 @@
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
             <version>${commons.fileupload.version}</version>
-        </dependency>            
+        </dependency>
+        <dependency> <!-- remove commons logging, brought in by orientdb... -->
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+          <version>1.1.1</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency> <!-- and replace it with slf4j -->
+          <groupId>org.slf4j</groupId>
+          <artifactId>jcl-over-slf4j</artifactId>
+          <version>1.7.12</version>
+        </dependency>        
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
