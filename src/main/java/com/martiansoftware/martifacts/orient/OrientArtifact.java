@@ -1,6 +1,6 @@
-package com.martiansoftware.martifact.orient;
+package com.martiansoftware.martifacts.orient;
 
-import com.martiansoftware.martifact.Artifact;
+import com.martiansoftware.martifacts.model.Artifact;
 import com.orientechnologies.orient.core.db.record.OIdentifiable;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import java.io.IOException;

@@ -1,6 +1,6 @@
-package com.martiansoftware.martifact;
+package com.martiansoftware.martifacts.model;
 
-import com.martiansoftware.martifact.Artifact;
+import com.martiansoftware.martifacts.model.Artifact;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;

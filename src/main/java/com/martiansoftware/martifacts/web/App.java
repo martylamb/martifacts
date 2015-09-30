@@ -1,8 +1,8 @@
-package com.martiansoftware.martifact.web;
+package com.martiansoftware.martifacts.web;
 
 import static com.martiansoftware.boom.Boom.get;
 import static com.martiansoftware.boom.Boom.post;
-import com.martiansoftware.martifact.orient.OrientArtifactStore;
+import com.martiansoftware.martifacts.orient.OrientArtifactStore;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.slf4j.Logger;
@@ -39,7 +39,8 @@ public class App {
             post("/add", new ArtifactAdder(_store)::add);
             get("/get/:id", new ArtifactGetter(_store)::get);
             get("/search", new ArtifactSearcher(_store)::search);
-            get("/client", new ClientGetter()::getClient);        
+            get("/client", new ClientGetter()::getClient);
+            log.info("Ready for clients.");
         } catch (Exception e) {
             log.error("Unable to launch server: {}", rootCauseOf(e).getLocalizedMessage());
         }

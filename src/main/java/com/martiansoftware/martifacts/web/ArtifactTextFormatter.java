@@ -1,6 +1,6 @@
-package com.martiansoftware.martifact.web;
+package com.martiansoftware.martifacts.web;
 
-import com.martiansoftware.martifact.Artifact;
+import com.martiansoftware.martifacts.model.Artifact;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package com.martiansoftware.martifact.web;
+package com.martiansoftware.martifacts.web;
 
 import com.martiansoftware.boom.BoomResponse;
 import static com.martiansoftware.boom.Boom.request;

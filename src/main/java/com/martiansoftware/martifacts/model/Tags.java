@@ -1,4 +1,4 @@
-package com.martiansoftware.martifact;
+package com.martiansoftware.martifacts.model;
 
 import java.util.Collection;
 import java.util.stream.Collectors;

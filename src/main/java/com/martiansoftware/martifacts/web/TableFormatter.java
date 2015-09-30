@@ -1,4 +1,4 @@
-package com.martiansoftware.martifact.web;
+package com.martiansoftware.martifacts.web;
 
 import java.util.Collection;
 import java.util.List;

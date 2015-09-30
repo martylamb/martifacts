@@ -1,10 +1,10 @@
-package com.martiansoftware.martifact.orient;
+package com.martiansoftware.martifacts.orient;
 
 import com.martiansoftware.blobstore.Blob;
 import com.martiansoftware.blobstore.BlobStore;
 import com.martiansoftware.blobstore.Ref;
-import com.martiansoftware.martifact.Artifact;
-import com.martiansoftware.martifact.ArtifactStore;
+import com.martiansoftware.martifacts.model.Artifact;
+import com.martiansoftware.martifacts.model.ArtifactStore;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;

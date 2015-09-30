@@ -1,4 +1,4 @@
-package com.martiansoftware.martifact.orient;
+package com.martiansoftware.martifacts.orient;
 
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
