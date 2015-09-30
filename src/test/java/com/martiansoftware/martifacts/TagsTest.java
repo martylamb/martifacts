@@ -1,5 +1,6 @@
-package com.martiansoftware.martifact;
+package com.martiansoftware.martifacts;
 
+import com.martiansoftware.martifacts.model.Tags;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;

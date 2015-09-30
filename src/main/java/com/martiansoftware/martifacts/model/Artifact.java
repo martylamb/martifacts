@@ -1,4 +1,4 @@
-package com.martiansoftware.martifact;
+package com.martiansoftware.martifacts.model;
 
 import java.io.IOException;
 import java.io.InputStream;

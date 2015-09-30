@@ -1,12 +1,12 @@
-package com.martiansoftware.martifact.web;
+package com.martiansoftware.martifacts.web;
 
-import com.martiansoftware.martifact.ArtifactStore;
+import com.martiansoftware.martifacts.model.ArtifactStore;
 import static com.martiansoftware.boom.Boom.halt;
 import static com.martiansoftware.boom.Boom.request;
 import static com.martiansoftware.boom.Boom.response;
 import com.martiansoftware.boom.BoomResponse;
 import com.martiansoftware.boom.MimeType;
-import com.martiansoftware.martifact.Artifact;
+import com.martiansoftware.martifacts.model.Artifact;
 import java.io.IOException;
 import java.util.Optional;
 

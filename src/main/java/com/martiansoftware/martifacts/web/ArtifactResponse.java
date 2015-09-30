@@ -1,11 +1,11 @@
-package com.martiansoftware.martifact.web;
+package com.martiansoftware.martifacts.web;
 
 import com.martiansoftware.boom.Boom;
 import static com.martiansoftware.boom.Boom.json;
 import static com.martiansoftware.boom.Boom.text;
 import com.martiansoftware.boom.BoomResponse;
 import com.martiansoftware.boom.MimeType;
-import com.martiansoftware.martifact.Artifact;
+import com.martiansoftware.martifacts.model.Artifact;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;

@@ -1,5 +1,6 @@
-package com.martiansoftware.martifact.orient;
+package com.martiansoftware.martifacts.orient;
 
+import com.martiansoftware.martifacts.orient.OrientBackend;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.OCommandSQL;
 import java.io.IOException;

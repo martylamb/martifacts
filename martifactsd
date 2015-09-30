@@ -1,4 +1,4 @@
 #!/bin/bash
 
 echo "(launching via mvn; there may be some one-time downloads)"
-mvn exec:java -Dexec.mainClass="com.martiansoftware.martifact.web.App" -Dexec.args="$*"
+mvn exec:java -Dexec.mainClass="com.martiansoftware.martifacts.web.App" -Dexec.args="$*"

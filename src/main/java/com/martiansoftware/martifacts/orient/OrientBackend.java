@@ -1,6 +1,6 @@
-package com.martiansoftware.martifact.orient;
+package com.martiansoftware.martifacts.orient;
 
-import com.martiansoftware.martifact.Tags;
+import com.martiansoftware.martifacts.model.Tags;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.martiansoftware.martifact.orient.OrientSupport.db;
+import static com.martiansoftware.martifacts.orient.OrientSupport.db;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
