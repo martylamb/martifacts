@@ -6,6 +6,16 @@ body {
     line-height: 1.6em;
 }
 
+left { float: left; }
+right { float: right; }
+stretch {
+    display: block;
+    overflow: hidden;
+    padding-right: 5px;
+    padding-left: 10px;
+}
+.stretch > input{ width: 100%; }
+
 .help {
     color: #adadad;
 }

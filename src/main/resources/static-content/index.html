@@ -35,14 +35,23 @@
                 </table>
             </form>
             <div class="pure-g">
-                <div class="pure-u-1">
-                    Or use the <a href="client">command-line client</a>.
+                <div id="show_client_div" class="pure-u-1" style="display:none">
+                    Or use the <a id="show_client_a" href="#">command-line client</a>.
                     <br/><br/>
                 </div>
-<!--
-                <div class="pure-u-lg-1-3 pure-u-md-1-2 pure-u-sm-1"><p>Two</p></div>
-                <div class="pure-u-lg-1-3 pure-u-md-1-2 pure-u-sm-1"><p>Three and four and five and the quick brown fox jumped over the lazy dog and tripped and fell on its face and had to have its jaw wired shut for months.</p></div>
--->
+                <div id="client_div" class="pure-u-1">
+                    <form class="pure-form pure-form-stacked" action="">
+                        <table width="100%" border="0">
+                            <tr>
+                                <td style="white-space:pre;">Download a bash script client for interacting with </td>
+                                <td width="100%"><input id="siteroot" name="siteroot" type="text" style="width:100%" placeholder="Your Martifacts URL"></td>
+                                <td><button id="get_client_button" class="pure-button pure-button-primary">Download Client</button></td>
+                            </tr>
+                        </table>
+                    </form>
+                    <div style="text-align:right"><a id="hide_client_a" href="#">Hide this</a></div>
+                    <br/><br/>
+                </div>
             </div>
             <table id="results" class="display compact" cellspacing="0" width="100%">
                 <thead>
@@ -65,7 +74,7 @@
                 <a href="http://github.com/martylamb/martifacts">Source on GitHub</a>
             </div>
         </div>
-        
+        <iframe id="download_target" style="display:none;"></iframe>  
         <script>
             var results;
             var q = "";
@@ -125,6 +134,25 @@
                 $("#q").change(updateSearchButton);
                 $("#q").keyup(updateSearchButton);
                 updateSearchButton();
+                
+                $("#siteroot").val(window.location.href.replace(/[?#].*/, "").replace(/index.html$/, ""));
+                
+                $("#client_div").hide()
+                $("#show_client_div").show();
+                
+                $("#show_client_a").click(function() {
+                    $("#client_div").show();
+                    $("#show_client_div").hide();
+                });
+                
+                $("#hide_client_a").click(function() {
+                    $("#client_div").hide();
+                    $("#show_client_div").show();
+                });
+                
+                $("#get_client_button").click(function() {
+                    $("#download_target").src="client";
+                });
             });
         </script>
     </body>
