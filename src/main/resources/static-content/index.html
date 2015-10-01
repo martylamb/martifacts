@@ -34,25 +34,7 @@
                     </tr>
                 </table>
             </form>
-            <div class="pure-g">
-                <div id="show_client_div" class="pure-u-1" style="display:none">
-                    Or use the <a id="show_client_a" href="#">command-line client</a>.
-                    <br/><br/>
-                </div>
-                <div id="client_div" class="pure-u-1">
-                    <form class="pure-form pure-form-stacked" action="">
-                        <table width="100%" border="0">
-                            <tr>
-                                <td style="white-space:pre;">Download a bash script client for interacting with </td>
-                                <td width="100%"><input id="siteroot" name="siteroot" type="text" style="width:100%" placeholder="Your Martifacts URL"></td>
-                                <td><button id="get_client_button" class="pure-button pure-button-primary">Download Client</button></td>
-                            </tr>
-                        </table>
-                    </form>
-                    <div style="text-align:right"><a id="hide_client_a" href="#">Hide this</a></div>
-                    <br/><br/>
-                </div>
-            </div>
+            Or use this site's <a id="getclient" href="client">command-line client</a>.<br/><br/>
             <table id="results" class="display compact" cellspacing="0" width="100%">
                 <thead>
                     <tr>
@@ -135,24 +117,9 @@
                 $("#q").keyup(updateSearchButton);
                 updateSearchButton();
                 
-                $("#siteroot").val(window.location.href.replace(/[?#].*/, "").replace(/index.html$/, ""));
+                var site = encodeURIComponent(window.location.href.replace(/[?#].*/, "").replace(/index.html$/, ""));
+                $("#getclient").attr("href", "client?site=" + site);
                 
-                $("#client_div").hide()
-                $("#show_client_div").show();
-                
-                $("#show_client_a").click(function() {
-                    $("#client_div").show();
-                    $("#show_client_div").hide();
-                });
-                
-                $("#hide_client_a").click(function() {
-                    $("#client_div").hide();
-                    $("#show_client_div").show();
-                });
-                
-                $("#get_client_button").click(function() {
-                    $("#download_target").src="client";
-                });
             });
         </script>
     </body>

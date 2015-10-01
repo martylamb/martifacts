@@ -4,15 +4,16 @@
 URL=
 
 CURL=curl
+MARTIFACTS=$0
 ACCEPT="text/plain"
 
 function showHelp() {
     cat <<EOF
-USAGE: martifact -h/--help
-       martifact [-j] add FILE [TAG...]
-       martifact get ID [LOCALFILE]
-       martifact [-j] tags
-       martifact [-j] search [TAG|ID|HASH...]
+USAGE: ${MARTIFACTS} -h/--help
+       ${MARTIFACTS} [-j] add FILE [TAG...]
+       ${MARTIFACTS} get ID [LOCALFILE]
+       ${MARTIFACTS} [-j] tags
+       ${MARTIFACTS} [-j] search [TAG|ID|HASH...]
        
    -j  response should be in JSON format
    
