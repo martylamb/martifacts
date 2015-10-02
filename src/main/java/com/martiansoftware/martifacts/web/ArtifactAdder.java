@@ -47,7 +47,6 @@ public class ArtifactAdder {
         MultipartConfigElement multipartConfigElement = new MultipartConfigElement("/tmp/boom", Long.MAX_VALUE, Long.MAX_VALUE, 4096);
         request().raw().setAttribute(org.eclipse.jetty.server.Request.__MULTIPART_CONFIG_ELEMENT, multipartConfigElement);
    
-        System.err.println("MARTY: " + Boom.h("Accept"));
         Part file = request().raw().getPart("file");
         if (file == null) halt(HTTP_MISSING_OR_BAD_PARAM, "No file provided!");
 
