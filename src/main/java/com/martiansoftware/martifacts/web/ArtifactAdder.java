@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Optional;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
 import javax.servlet.http.Part;
@@ -26,10 +27,10 @@ public class ArtifactAdder {
     public ArtifactAdder(ArtifactStore store) { _store = store; }
     
     private Date getFileTimeFromRequest() {
-        String fileTimeS = q("filetime");
-        if (fileTimeS == null) return new Date();
+        Optional<String> fileTimeS = q("filetime");        
+        if (!fileTimeS.isPresent()) return new Date();
         try {
-            return new Date(Long.parseLong(fileTimeS));
+            return new Date(Long.parseLong(fileTimeS.get()));
         } catch (Exception e) {
             halt(HTTP_MISSING_OR_BAD_PARAM, String.format("Unable to parse filetime '%s': " + e.getMessage(), fileTimeS));
             return null; // unreachable due to halt, included to appease compiler
@@ -37,9 +38,8 @@ public class ArtifactAdder {
     }
     
     private Collection<String> getTagsFromRequest() {
-        String tagString = q("tags");
-        if (tagString == null) return Collections.EMPTY_LIST;
-        return Arrays.asList(tagString.split("\\s+"));
+        Optional<String> tagString = q("tags");
+        return tagString.map(s -> Arrays.asList(s.split("\\s+"))).orElse(Collections.EMPTY_LIST);
     }
     
     // e.g.: curl -H "ACCEPT: text/plain" -F file=@testdisk.log -F "filetime=`date -r testdisk.log '+%s000'`" -F "tags=tag1 tag2 tag3" http://127.0.0.1:4567/add

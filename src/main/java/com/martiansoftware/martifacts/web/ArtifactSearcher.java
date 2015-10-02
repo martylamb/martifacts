@@ -31,15 +31,17 @@ public class ArtifactSearcher {
         Collection<String> queryTags = new java.util.HashSet<>();
         
         // parse query string (in parameter "q") to ids, hashes, and tags
-        Arrays.asList(Optional.of(q("q")).orElse("").toLowerCase().split("\\s+"))
+        q("q").ifPresent(q -> 
+            Arrays.asList(q.split("\\s+"))
                 .stream().filter(s -> !s.isEmpty())
                 .forEach(
-                    q -> {
-                        if (ID_PATTERN.matcher(q).matches()) queryIds.add(q);
-                        else if (SHA1_PATTERN.matcher(q).matches()) queryHashes.add(q);
-                        else queryTags.add(q);
+                    w -> {
+                        if (ID_PATTERN.matcher(w).matches()) queryIds.add(w);
+                        else if (SHA1_PATTERN.matcher(w).matches()) queryHashes.add(w);
+                        else queryTags.add(w);
                     }
-                );
+                )
+        );
         
         // no search params means "give me everything!"
         if (queryHashes.isEmpty() && queryIds.isEmpty() && queryTags.isEmpty()) return ArtifactResponse.of(_store.all());

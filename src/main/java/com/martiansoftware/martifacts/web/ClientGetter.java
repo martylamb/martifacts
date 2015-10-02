@@ -10,6 +10,9 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -17,11 +20,19 @@ import java.nio.file.Paths;
  */
 public class ClientGetter {
     
+    private static final Logger log = LoggerFactory.getLogger(ClientGetter.class);
+    
     // returns a command line client with the URL properly set for this
     // server instance
-    public Object getClient() throws IOException, URISyntaxException {        
-        String site = q("site", request().url()).replaceAll("[?#].*", "").replaceAll("/(index\\.html|client)$", "").replaceAll("/+$", "");        
+    public Object getClient() throws IOException, URISyntaxException {
+        log.debug("getClient() => site='{}'", q("site"));
+        log.debug("getClient() => url='{}'", request().url());        
+
+        String site = q("site").orElse(request().url()).replaceAll("[?#].*", "").replaceAll("/(index\\.html|client)$", "").replaceAll("/+$", "");
         String URLdef = String.format("URL=\"%s\"\n", site);
+
+        log.debug("getClient() => URLdef='{}'", URLdef);
+
         Path p = Paths.get(ClientGetter.class.getResource("/client/martifacts").toURI());
         
         StringBuilder s = new StringBuilder();
