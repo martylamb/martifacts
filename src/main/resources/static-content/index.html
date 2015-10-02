@@ -34,7 +34,7 @@
                     </tr>
                 </table>
             </form>
-            Or use this site's <a id="getclient" href="client" download>command-line client</a>.<br/><br/>
+            Or use this site's <a id="getclient" href="martifacts" download>command-line client</a>.<br/><br/>
             <table id="results" class="display compact" cellspacing="0" width="100%">
                 <thead>
                     <tr>
@@ -118,7 +118,7 @@
                 updateSearchButton();
                 
                 var site = encodeURIComponent(window.location.href.replace(/[?#].*/, "").replace(/index.html$/, ""));
-                $("#getclient").attr("href", "client?site=" + site);
+                $("#getclient").attr("href", "martifacts?site=" + site);
                 
             });
         </script>
