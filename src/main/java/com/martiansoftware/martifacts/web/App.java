@@ -39,7 +39,7 @@ public class App {
             post("/add", new ArtifactAdder(_store)::add);
             get("/get/:id", new ArtifactGetter(_store)::get);
             get("/search", new ArtifactSearcher(_store)::search);
-            get("/client", new ClientGetter()::getClient);
+            get("/martifacts", new ClientGetter()::getClient);
             log.info("Ready for clients.");
         } catch (Exception e) {
             log.error("Unable to launch server: {}", rootCauseOf(e).getLocalizedMessage());
