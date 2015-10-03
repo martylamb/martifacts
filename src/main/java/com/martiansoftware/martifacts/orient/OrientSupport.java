@@ -9,9 +9,11 @@ import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.OCommandSQL;
 import com.orientechnologies.orient.core.tx.OTransaction;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,7 +122,10 @@ class OrientSupport {
     
     // TODO: should be oidentifiable?
     public List<ODocument> sql(OCommandSQL osql, Object... args) {
-        log.debug("SQL: {}", osql);
+        if (log.isTraceEnabled()) {
+            log.trace("SQL: {} [{}]", osql, Arrays.asList(args).stream().map(Object::toString).collect(Collectors.joining(", ")));
+        }
+        
         Object o = osql.execute(args);
         if (o == null) {
             log.info(String.format("Turns out you get a NULL result for sql query '%s'\n", osql.getText()));
