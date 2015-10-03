@@ -11,7 +11,7 @@ function showHelp() {
     cat <<EOF
 USAGE: ${MARTIFACTS} -h/--help
        ${MARTIFACTS} [-j] add FILE [TAG...]
-       ${MARTIFACTS} get ID [LOCALFILE]
+       ${MARTIFACTS} get ID [LOCALFILENAME]
        ${MARTIFACTS} [-j] tags
        ${MARTIFACTS} [-j] search [TAG|ID|HASH...]
        
