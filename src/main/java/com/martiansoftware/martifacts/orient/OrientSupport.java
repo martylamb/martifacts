@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -123,7 +124,12 @@ class OrientSupport {
     // TODO: should be oidentifiable?
     public List<ODocument> sql(OCommandSQL osql, Object... args) {
         if (log.isTraceEnabled()) {
-            log.trace("SQL: {} [{}]", osql, Arrays.asList(args).stream().map(Object::toString).collect(Collectors.joining(", ")));
+            log.trace("SQL: {} [{}]", osql, 
+                        Arrays.asList(args)
+                                .stream()
+                                .map(Objects::toString)
+                                .collect(Collectors.joining(", "))
+            );
         }
         
         Object o = osql.execute(args);
