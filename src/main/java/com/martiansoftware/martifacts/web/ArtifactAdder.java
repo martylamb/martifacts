@@ -44,7 +44,7 @@ public class ArtifactAdder {
     
     // e.g.: curl -H "ACCEPT: text/plain" -F file=@testdisk.log -F "filetime=`date -r testdisk.log '+%s000'`" -F "tags=tag1 tag2 tag3" http://127.0.0.1:4567/add
     Object add() throws IOException, ServletException {
-        MultipartConfigElement multipartConfigElement = new MultipartConfigElement("/tmp/boom", Long.MAX_VALUE, Long.MAX_VALUE, 4096);
+        MultipartConfigElement multipartConfigElement = new MultipartConfigElement(Boom.tmp().toString(), Long.MAX_VALUE, Long.MAX_VALUE, 1024 * 1024);
         request().raw().setAttribute(org.eclipse.jetty.server.Request.__MULTIPART_CONFIG_ELEMENT, multipartConfigElement);
    
         Part file = request().raw().getPart("file");
