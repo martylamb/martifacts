@@ -28,6 +28,10 @@ function usageAndExit() {
 function doAdd() {
 	[ $# -eq 0 ] && usageAndExit
 	FILE="$1"
+	if [ ! -e "${FILE}" ]; then
+		echo "No such file: ${FILE}" >&2
+		exit 2
+	fi
 	shift
 	$CURL -H "Accept: $ACCEPT" -F "file=@$FILE" -F "filetime=`date -r \"$FILE\" '+%s000'`" -F "tags=$*" ${URL}/add
 }
