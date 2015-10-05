@@ -124,14 +124,13 @@ class OrientSupport {
     // TODO: should be oidentifiable?
     public List<ODocument> sql(OCommandSQL osql, Object... args) {
         if (log.isTraceEnabled()) {
-            log.trace("SQL: {} [{}]", osql, 
+            log.trace("SQL: {} [{}]", osql.getText(), 
                         Arrays.asList(args)
                                 .stream()
                                 .map(Objects::toString)
                                 .collect(Collectors.joining(", "))
             );
         }
-        
         Object o = osql.execute(args);
         if (o == null) {
             log.info(String.format("Turns out you get a NULL result for sql query '%s'\n", osql.getText()));

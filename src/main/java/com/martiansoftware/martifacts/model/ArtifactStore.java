@@ -1,10 +1,8 @@
 package com.martiansoftware.martifacts.model;
 
-import com.martiansoftware.martifacts.model.Artifact;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.nio.file.attribute.FileTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
@@ -63,6 +61,13 @@ public interface ArtifactStore {
      * @return the Artifact with the specified id, if it exists
      */
     public Optional<Artifact> findById(String id);
+    
+    /**
+     * Finds all Artifacts that match an implementation-specific query string.
+     * @param searchQuery an implementation-specific query string.
+     * @return all matching Artifacts
+     */
+    public Collection<Artifact> findByQuery(String searchQuery);
     
     /**
      * Returns all Artifacts
