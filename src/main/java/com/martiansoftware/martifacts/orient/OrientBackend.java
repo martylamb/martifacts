@@ -85,11 +85,13 @@ class OrientBackend extends OrientSupport {
      * @param tags the tags to return
      * @return the ODocuments for each (unique, normalized) requested tag defined in the db
      */
-    private List<ODocument> getTagDocsFor(Collection<String> tags) {
-        if (tags.isEmpty()) return Collections.EMPTY_LIST;
-        Collection<String> ntags = Tags.normalize(tags);
-        String q = "select from Tag where " + ntags.stream().map(t -> "(name = ?) ").collect(Collectors.joining("OR "));
-        return Collections.unmodifiableList(sql(q, (Object[]) ntags.toArray(new String[ntags.size()])));
+    List<ODocument> findTagDocsFor(Collection<String> tags) {
+        return tx(() -> {
+            if (tags.isEmpty()) return Collections.EMPTY_LIST;
+            Collection<String> ntags = Tags.normalize(tags);
+            String q = "select from Tag where " + ntags.stream().map(t -> "(name = ?) ").collect(Collectors.joining("OR "));
+            return Collections.unmodifiableList(sql(q, (Object[]) ntags.toArray(new String[ntags.size()])));
+        });
     }
 
     /**
@@ -121,7 +123,7 @@ class OrientBackend extends OrientSupport {
         Collection<String> ntags = Tags.normalize(tags);
         tx(() -> {
             Set<ODocument> tagLinks = artifact.field("tags");
-            getTagDocsFor(ntags).forEach(d -> tagLinks.remove(d));
+            findTagDocsFor(ntags).forEach(d -> tagLinks.remove(d));
             artifact.save();            
         });
     }
@@ -172,7 +174,7 @@ class OrientBackend extends OrientSupport {
     public List<ODocument> findArtifactDocsWithAllTags(Collection<String> tags) {
         return tx(() -> {
             Collection<String> ntags = Tags.normalize(tags);
-            List<ODocument> tagDocs = getTagDocsFor(tags);
+            List<ODocument> tagDocs = findTagDocsFor(tags);
             if (tagDocs.isEmpty()) return Collections.EMPTY_LIST;
             String q = "select from Artifact where " + tagDocs.stream().map(t -> "tags contains " + t.getIdentity() + " ").collect(Collectors.joining("AND "));
             return Collections.unmodifiableList(sql(q, (Object[]) ntags.toArray(new String[ntags.size()])));
@@ -195,6 +197,15 @@ class OrientBackend extends OrientSupport {
     public List<ODocument> findArtifactDocsWithHash(String hash) {
         return tx(() -> {
             return Collections.unmodifiableList(sql("select from Artifact where sha1 = ?", hash));
+        });
+    }
+    
+    public List<ODocument> findArtifactDocsByQuery(String query) {
+        OrientSearch search = new OrientSearch(query, this);
+        if (search.hasNoParams()) return all();
+        if (search.hasNoResults()) return Collections.EMPTY_LIST;
+        return tx(() -> {
+           return Collections.unmodifiableList(sql(search.sql(), search.sqlParams().toArray()));
         });
     }
     

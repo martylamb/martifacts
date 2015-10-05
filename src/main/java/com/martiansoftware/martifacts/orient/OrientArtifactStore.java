@@ -84,6 +84,15 @@ public class OrientArtifactStore implements ArtifactStore {
         );
     }
 
+    @Override public Collection<Artifact> findByQuery(String query) {        
+        return Collections.unmodifiableList(
+                _backend.findArtifactDocsByQuery(query)
+                .stream()
+                .map(doc -> new OrientArtifact(this, _backend, doc))
+                .collect(Collectors.toList())
+        );
+    }
+    
     @Override
     public Collection<Artifact> all() {
         return Collections.unmodifiableList(
