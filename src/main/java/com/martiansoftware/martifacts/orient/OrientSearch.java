@@ -1,6 +1,7 @@
 package com.martiansoftware.martifacts.orient;
 
 import com.martiansoftware.martifacts.model.Tags;
+import com.martiansoftware.time.DateRange;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,19 +28,22 @@ class OrientSearch {
     
     public OrientSearch(String search, OrientBackend backend) {
         search = search.toLowerCase(); // everything is case-insensitive here...
+
+        // everything but tags and dates is ORed together.  Tags and dates are then filters on those results.
+        Clause generalClause = new Clause(" OR ");            
+        Clause datesClause = new Clause(" OR ");
+        Clause tagsClause = new Clause(" AND ");
         
-        Clause nonTagsClause; // everything but tags is ORed together.  Tags are then filters on those results.
-        nonTagsClause = new Clause(" OR ");        
-        
-        Set<String> tags = new java.util.HashSet<>();  // tags specified as part of query, held separate from other params
-        
+        Set<String> tags = new java.util.HashSet<>();  // tags specified as part of query, held separate from other params        
         List<QueryMatcher> matchers = new java.util.ArrayList<>();
         matchers.add(new QueryMatcher("id:", "^\\p{XDigit}{8}-(?:\\p{XDigit}{4}-){3}\\p{XDigit}{12}$")  // a UUID or manually prefixed with "id:"
-                        .onMatch((s) -> nonTagsClause.add("uuid = ?", s)));
+                        .onMatch((s) -> generalClause.add("uuid = ?", s)));
         matchers.add(new QueryMatcher("sha1:", "^\\p{XDigit}{40}$")                             // a SHA-1 hash or manually prefixed with "sha1:"
-                        .onMatch((s) -> nonTagsClause.add("sha1 = ?", s)));
+                        .onMatch((s) -> generalClause.add("sha1 = ?", s)));
         matchers.add(new QueryMatcher("name:", ".*[*?].*")                                     // any file glob or manually prefixed with "name:"
-                        .onMatch((s) -> addNameToQuery(nonTagsClause, s)));
+                        .onMatch((s) -> addNameToQuery(generalClause, s)));
+        matchers.add(new QueryMatcher("date:", DateRange.regexes())
+                        .onMatch(s -> datesClause.add(sqlForDateRange(DateRange.forQuery(s)))));
         matchers.add(new QueryMatcher("tag:", ".+")                                             // anything else or manually prefixed with "tag:"
                         .onMatch(s -> tags.add(s)));
         
@@ -48,33 +52,37 @@ class OrientSearch {
             (s) -> matchers.stream().filter((m) -> m.matchSuccess(s)).findFirst().orElseThrow(IllegalArgumentException::new)
         );
 
-        // first check the tags specified on the command line.  any results returned must match ALL tags specified.
+        // first check the tags specified in the query.  any results returned must match ALL tags specified.
         // easy shortcut: if any nonexistent tags were specified we can shortcut since we know nothing can match.
         Collection<String> ntags = Tags.normalize(tags);
-        String tagSql = null; // the sql for the tag portion of the query.  save it for later.
         if (!ntags.isEmpty()) {
             List<ODocument> tagDocs = backend.findTagDocsFor(ntags);
             if (tagDocs.size() < ntags.size()) { // nonexistent tags specified - nothing can possibly match
                 noResults = true; noSearchParams = false; sql = ""; return;
             } else{
-                // use RIDs for tags since the Artifacts.tags linkset is indexed
-                tagSql = tagDocs.stream().map(t -> "tags contains " + t.getIdentity() + " ").collect(Collectors.joining("AND "));
+                tagDocs.stream().forEach((t) -> tagsClause.add("tags contains " + t.getIdentity()));
             }
         }
 
         // if we got this far we have some sql to build
         StringBuilder s = new StringBuilder();
         s.append("select from Artifact where ");
-        if (!nonTagsClause.isEmpty()) {
-            s.append(nonTagsClause.sql());          // all of the non-tag conditions for our sql as a prepared statement...
-            params.addAll(nonTagsClause.params());  // ...plus all of the associated parameters for the prepared statement
+        if (!generalClause.isEmpty()) {
+            s.append(generalClause.sql());          // all of the non-tag conditions for our sql as a prepared statement...
+            params.addAll(generalClause.params());  // ...plus all of the associated parameters for the prepared statement
             noSearchParams = false;                 // something was specified by the user, so don't return ALL
+        }        
+        if (!datesClause.isEmpty()) {
+            if (!noSearchParams) s.append(" AND ");
+            s.append(datesClause.sql());
+            noSearchParams = false;
         }
-        if (tagSql != null) {
+        if (!tagsClause.isEmpty()) {
             if (!noSearchParams) s.append(" AND ");  // only need AND if there was a nonTagsClause
-            s.append(String.format("(%s)", tagSql)); // require all of the tags identified above
+            s.append(tagsClause.sql());
             noSearchParams = false;                  // something was specified by the user, so don't return ALL
         }
+        s.append(" order by time desc");
         sql = s.toString();        
     }
     
@@ -86,12 +94,17 @@ class OrientSearch {
     // split a String containing a query into individual search parameters.  TODO: handle quoted strings so users can search for filenames with spaces
     private Stream<String> split(String search) { return Arrays.asList(search.split("\\s+")).stream().filter((s) -> !s.isEmpty()); }
     
+    private String sqlForDateRange(DateRange dr) {
+        return String.format("time between '%s 00:00:00' and '%s 23:59:59'", dr.from(), dr.to());
+    }
+    
     // filenames in queries are a bit different.  straight names work as prepared statements, but regexes don't.
     private void addNameToQuery(Clause clause, String s){
         if (isGlob(s)) clause.add(String.format("name MATCHES \"%s\"", globToRegex(s)));
         else clause.add("name = ?", s);
     }    
     
+    // detects file globs
     private boolean isGlob(String s) { return s.contains("*") || s.contains("?"); }
     
     // converts a filename glob (with special chars * and ?) to a regex

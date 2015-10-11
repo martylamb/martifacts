@@ -26,7 +26,7 @@
                 <table width="100%" border="0">
                     <tr>
                         <td width="100%">
-                            <input id="q" name="q" type="text" style="width:100%;" placeholder="Search for tags, IDs, or sha1 hashes (can't do filenames or dates yet)">
+                            <input id="q" name="q" type="text" style="width:100%;" placeholder="Search for tags, IDs, sha1 hashes, filenames, or dates" value="-1m">
                         </td>
                         <td>
                             <button id="search" class="pure-button pure-button-primary">Search</button>
@@ -69,7 +69,7 @@
             $(function() {
                 results = $("#results").dataTable( {
                     "ajax" : {
-                        "url" : "search?q=",
+                        "url" : "search?q=-1m",
                         "dataSrc" : ""
                     },
                     "columns": [

@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.martiansoftware.martifacts.orient.OrientSupport.db;
+import com.orientechnologies.orient.core.id.ORID;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,7 @@ class OrientBackend extends OrientSupport {
         noTx(() -> {            
             if (db().getMetadata().getSchema().getClass("Tag") == null) {
                 log.info("Defining schema");
+//                sql("alter database custom useLightweightEdges=false");
                 sql("create class Tag");
                 sql("create property Tag.name string");
                 sql("alter property Tag.name MANDATORY true");
@@ -111,6 +113,17 @@ class OrientBackend extends OrientSupport {
         });
     }
 
+    void deleteUnusedTags() {
+        tx(() -> {
+            // this seems much more complicated than it needs to be.  would prefer a single sql statement
+            Set<ORID> usedTags = new java.util.HashSet<>();
+            sql("select tag from (select tags as tag from artifact unwind tag) group by tag")
+                .forEach(d -> usedTags.add(((ODocument) d.field("tag")).getIdentity()));
+            sql("select from tag")
+                .forEach(d -> { if (!usedTags.contains(d.getIdentity())) d.delete(); });
+        });
+    }
+
     /**
      * Removes links to the (unique, normalized) collection of tags from the specified
      * Artifact document
@@ -124,7 +137,8 @@ class OrientBackend extends OrientSupport {
         tx(() -> {
             Set<ODocument> tagLinks = artifact.field("tags");
             findTagDocsFor(ntags).forEach(d -> tagLinks.remove(d));
-            artifact.save();            
+            artifact.save();
+            deleteUnusedTags();
         });
     }
 //  ----------------------------------------------------------------------------

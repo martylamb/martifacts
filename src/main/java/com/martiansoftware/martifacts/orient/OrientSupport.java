@@ -45,6 +45,7 @@ class OrientSupport {
         } else {
             log.info("Opening database...");
         }
+        log.info(dburl);
         _pool = new OPartitionedDatabasePool( dburl, "admin", "admin").setAutoCreate(autoCreate);        
     }
 
