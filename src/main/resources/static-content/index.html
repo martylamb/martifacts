@@ -34,8 +34,33 @@
                     </tr>
                 </table>
             </form>
-            <div class="help">Example: release *.rpm</div>
-            Or use this site's <a id="getclient" href="martifacts" download>command-line client</a>.<br/><br/>
+            <table width="100%" border="0">
+                <tr>
+                    <td><div class="help">Example: release *.rpm 2015-10-01+-2w</div></td>
+                    <td align="right"><a id="showhidehelp" href="#">Search Help</a></td>
+                </tr>
+            </table>
+            <div id="searchhelp">
+                <p>You can search by filename, date, sha1 hash, artifact id, or tag.  Dates and tags are applied as filters if other search
+                    criteria are specified.  An empty search or a search consisting of only tags and/or dates will return (and filter by tag/date)
+                    all artifacts.
+                </p>
+                <p>The server will try to make good guesses about what you mean by each search term (e.g., a UUID or sha1 hash will be interpreted as a
+                    artifact id or sha1 hash automatically).  Dates are recognized by the syntax provided below.  By default, other terms are interpreted
+                    as tags unless they contain file glob characters (* or ?).</p>
+                <p>You can force specific interpretations of a search terms by prefixing them with "name:", "date:", "sha1:", "id:", or "tag:".
+                    Notably, searching for a specific file by name without globs will require the "name:" prefix in order not to be interpreted as a tag.</p>
+                <p>Dates and date ranges can be specified in several ways:
+                    <ul>
+                        <li>A single date in yyyy-MM-dd form, e.g. "2015-12-25"</li>
+                        <li>A range of dates joined by a dash, e.g., "2016-01-01-2016-01-31"</li>
+                        <li>A date with +, -, or +- adjustments in years, months, weeks, and/or days, e.g. "2015-10-31+-1w2d" for "October 31, 2015 plus or minus one week and two days"</li>
+                        <li>A bare adjustment to be applied to today's date, e.g. "-1m" for the previous month.</li>
+                    </ul>
+                </p>
+                <div style="text-align:right"><a id="hidehelp" href="#">Hide Search Help</a></div>
+            </div>
+            Upload, download, and search with this site's <a id="getclient" href="martifacts" download>command-line client</a>.<br/><br/>
             <table id="results" class="display compact" cellspacing="0" width="100%">
                 <thead>
                     <tr>
@@ -121,6 +146,19 @@
                 var site = encodeURIComponent(window.location.href.replace(/[?#].*/, "").replace(/index.html$/, ""));
                 $("#getclient").attr("href", "martifacts?site=" + site);
                 
+                $("#showhidehelp").click(function() {
+                    if ($("#searchhelp").is(":visible")) {
+                        $("#hidehelp").click();
+                    } else {
+                        $("#showhidehelp").text("Hide Search Help")
+                        $("#searchhelp").show();
+                    }
+                });
+                $("#hidehelp").click(function() {
+                    $("#showhidehelp").text("Show Search Help");
+                    $("#searchhelp").hide(); 
+                });
+                $("#hidehelp").click();
             });
         </script>
     </body>
