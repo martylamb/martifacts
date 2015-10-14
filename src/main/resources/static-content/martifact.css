@@ -20,6 +20,12 @@ stretch {
     color: #adadad;
 }
 
+#searchhelp {
+    background: #e0e0e0;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
 .sha1 {
     color: #adadad;
     font-size: 90%;
