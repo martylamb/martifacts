@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
+import java.util.SortedMap;
 import java.util.SortedSet;
 
 /**
@@ -20,6 +21,12 @@ public interface ArtifactStore {
      */
     public SortedSet<String> tags();
 
+    /**
+     * Get all tags in the db, along with the number of artifacts using each.
+     * @return a map of tags to tag counts
+     */
+    public SortedMap<String, Long> tagStats();
+    
     /**
      * Creates a new Artifact with the specified name and tags
      * @param name the name of the new Artifact

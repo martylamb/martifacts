@@ -152,6 +152,14 @@ class OrientBackend extends OrientSupport {
     }
     
     /**
+     * Returns tags and tag counts
+     * @return tags and tag counts
+     */
+    public List<ODocument> tagStats() {
+        return Collections.unmodifiableList(tx(() -> sql("select count(*), name from (select expand(tags) from artifact) group by name;")));
+    }
+    
+    /**
      * Creates a new Artifact ODocument with the specified name and tags, and
      * an automatically generated uuid.
      * 
