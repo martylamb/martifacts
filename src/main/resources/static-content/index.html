@@ -63,8 +63,8 @@
             </form>
             <div style="transform:scale(0.8,0.8); transform-origin: 0 50%;">
                 tagged: <select id="taglist"></select>
-                &nbsp;&nbsp;file date within the last:
-                    <select id="datewithin">
+                &nbsp;&nbsp;file time within the last:
+                    <select id="timewithin">
                         <option value=""></option>
                         <option value="-1d">day</option>
                         <option value="-2w">2 weeks</option>
@@ -79,15 +79,16 @@
                     <tr>
                         <th>Name</th>
                         <th>Size</th>
-                        <th>Tags</th>
+                        <th>Time</th>
+                        <th>Tags, etc.</th>
                     </tr>
-                </thead>
- 
+                </thead> 
                 <tfoot>
                     <tr>
                         <th>Name</th>
                         <th>Size</th>
-                        <th>Tags</th>
+                        <th>Time</th>
+                        <th>Tags, etc.</th>
                     </tr>
                 </tfoot>
             </table>
@@ -152,9 +153,17 @@
                                   },
                           "sClass": "table-size"
                         },
+                        { "data": function(row, type, val, meta) {
+                                        if (type == 'display') {
+                                            var d = new Date(row.filetime);
+                                            return "<div style='font-size:90%'>" + d.toLocaleDateString() + "<br/>" + d.toLocaleTimeString() + "</div>";
+                                        } else return row.filetime;
+                                  },
+                          "sClass": "table-time"
+                        },
                         { "data": function(row, type, val, meta){
                                       if (type === 'display') {
-                                          return row.tags.join(' ') + "<div class='sha1'/>sha1:" + row.sha1 + "</div>";
+                                          return row.tags.join(' ') + "<div class='sha1'/>sha1: " + row.sha1 + "<br/>id: " + row.id + "</div>";
                                       } else return row.tags;
                                   },
                           "sClass": "table-tags"
@@ -202,7 +211,7 @@
                 
                 updateTagsDropdown();
                 $("#taglist").change(addToQuery);
-                $("#datewithin").change(addToQuery);
+                $("#timewithin").change(addToQuery);
             });
         </script>
     </body>

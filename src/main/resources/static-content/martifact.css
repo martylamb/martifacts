@@ -37,6 +37,11 @@ a, a:link, a:visited, a:hover, a:active {
 }
 
 
+.id {
+    color: #adadad;
+    font-size: 90%;
+}
+
 .sha1 {
     color: #adadad;
     font-size: 90%;
@@ -58,6 +63,11 @@ a, a:link, a:visited, a:hover, a:active {
 
 .table-size {
     text-align: right;
+    vertical-align: top;
+}
+
+.table-time {
+    text-align: center;
     vertical-align: top;
 }
 
