@@ -20,13 +20,22 @@ stretch {
     color: #adadad;
 }
 
+a, a:link, a:visited, a:hover, a:active {
+    color: #0070d8;
+}
+
 #searchhelp {
     background: #1f8dd6;
     padding-left: 1em;
     padding-right: 1em;
     color: #ffffff;
-    visibility: hidden;
+    display: none;
 }
+
+#searchhelp a, #searchhelp a:link, #searchhelp a:visited, #searchhelp a:hover, #searchhelp a:active {
+    color: #ffffff;
+}
+
 
 .sha1 {
     color: #adadad;
