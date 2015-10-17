@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
+import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -31,13 +32,18 @@ public class OrientArtifactStore implements ArtifactStore {
         _blobstore = new BlobStore(p.resolve("blobs"));
     }
 
-    @Override
-    public SortedSet<String> tags() {
+    @Override public SortedSet<String> tags() {
         return Collections.unmodifiableSortedSet(
             _backend.tagDocs().stream().map(doc -> (String) doc.field("name")).collect(Collectors.toCollection(TreeSet::new))
         );
     }
 
+    @Override public SortedMap<String, Long> tagStats() {
+        SortedMap<String, Long> result = new java.util.TreeMap<>();
+        _backend.tagStats().forEach(doc -> result.put(doc.field("name"), doc.field("count")));
+        return Collections.unmodifiableSortedMap(result);
+    }
+    
     private Artifact create(String name, Date fileTime, Blob blob, Collection<String> tags) throws IOException {
         return new OrientArtifact(this, _backend, _backend.createArtifactDoc(name, blob.ref().toString(), blob.size(), fileTime, tags));
     }

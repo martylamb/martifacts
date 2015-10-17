@@ -22,18 +22,6 @@
             <h1 style="font-family: 'Raleway', sans-serif;">Martifacts</h1>
         </div>
         <div class="content">
-            <form id="searchform" class="pure-form" action="">
-                <table width="100%" border="0">
-                    <tr>
-                        <td width="100%">
-                            <input id="q" name="q" type="text" style="width:100%;" placeholder="Search for tags, IDs, sha1 hashes, filenames, or dates" value="-1m">
-                        </td>
-                        <td>
-                            <button id="search" class="pure-button pure-button-primary">Search</button>
-                        </td>
-                    </tr>
-                </table>
-            </form>
             <table width="100%" border="0">
                 <tr>
                     <td><div class="help">Example: release *.rpm 2015-10-01+-2w</div></td>
@@ -60,7 +48,32 @@
                 </p>
                 <div style="text-align:right"><a id="hidehelp" href="#">Hide Search Help</a></div>
             </div>
-            Upload, download, and search with this site's <a id="getclient" href="martifacts" download>command-line client</a>.<br/><br/>
+
+            <form id="searchform" class="pure-form" action="">
+                <table width="100%" border="0">
+                    <tr>
+                        <td width="100%">
+                            <input id="q" name="q" type="text" style="width:100%;" placeholder="Search for tags, IDs, sha1 hashes, filenames, or dates" value="-1m">
+                        </td>
+                        <td>
+                            <button id="search" class="pure-button pure-button-primary">Search</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <div style="transform:scale(0.8,0.8); transform-origin: 0 50%;">
+                tagged: <select id="taglist"></select>
+                &nbsp;&nbsp;file date within:
+                    <select id="datewithin">
+                        <option value=""></option>
+                        <option value="-1d">the last day</option>
+                        <option value="-2w">the last 2 weeks</option>
+                        <option value="-1m">the last month</option>
+                        <option value="-6m">the last 6 months</option>
+                        <option value="-1y">the last year</option>
+                    </select>
+            </div>
+            <br/>Upload, download, and search with this site's <a id="getclient" href="martifacts" download>command-line client</a>.<br/><br/>
             <table id="results" class="display compact" cellspacing="0" width="100%">
                 <thead>
                     <tr>
@@ -91,6 +104,33 @@
                 $("#search").prop("disabled", ($("#q").val() === q));
             }
             
+            function updateTagsDropdown() {
+                $.getJSON("tagstats", function(data) {
+                    
+                    taglist=$("#taglist").find("option").remove().end();
+                    taglist.append("<option value=''></option>")
+                    $.each( data, function( key, val ) {                        
+                        taglist.append("<option value='" + key + "'>" + key + " (" + val + ")</option>");
+                    });
+                });
+            }
+            
+            function isAlreadySearchTerm(t) {
+                var terms = $("#q").val().split(/(\s+)/);
+                return $.inArray(t, terms) != -1;
+            }
+            
+            function addToQuery() {
+                if (this.value != "") {
+                    var q = $("#q").val();
+                    if (!isAlreadySearchTerm(this.value)) {
+                        if (q.length != 0) q = q + " ";
+                        $("#q").val(q + this.value);
+                        updateSearchButton();
+                    }
+                }
+            }
+
             $(function() {
                 results = $("#results").dataTable( {
                     "ajax" : {
@@ -122,8 +162,8 @@
                     ],
                     "oLanguage": {
                         "sSearch": "Filter results:",
-                        "sZeroRecords": "No matching Martifacts found.",
-                        "sLoadingRecords": "Loading Martifacts..."
+                        "sZeroRecords": "No matching artifacts found.",
+                        "sLoadingRecords": "Loading Artifacts..."
                     },
                     aLengthMenu: [
                         [25, 50, 100, 200, -1],
@@ -159,6 +199,10 @@
                     $("#searchhelp").hide(); 
                 });
                 $("#hidehelp").click();
+                
+                updateTagsDropdown();
+                $("#taglist").change(addToQuery);
+                $("#datewithin").change(addToQuery);
             });
         </script>
     </body>

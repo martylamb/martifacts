@@ -21,9 +21,11 @@ stretch {
 }
 
 #searchhelp {
-    background: #e0e0e0;
+    background: #1f8dd6;
     padding-left: 1em;
     padding-right: 1em;
+    color: #ffffff;
+    visibility: hidden;
 }
 
 .sha1 {

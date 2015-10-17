@@ -2,9 +2,12 @@ package com.martiansoftware.martifacts.web;
 
 import static com.martiansoftware.boom.Boom.get;
 import static com.martiansoftware.boom.Boom.post;
+import com.martiansoftware.boom.Json;
 import com.martiansoftware.martifacts.orient.OrientArtifactStore;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,12 +43,14 @@ public class App {
             get("/get/:id", new ArtifactGetter(_store)::get);
             get("/search", new ArtifactSearcher(_store)::search);
             get("/martifacts", new ClientGetter()::getClient);
+            get("/tagstats", new TagStatsGetter(_store)::tagstats);
+            
             log.info("Ready for clients.");
         } catch (Exception e) {
             log.error("Unable to launch server: {}", rootCauseOf(e).getLocalizedMessage());
         }
     }
-    
+       
     public static void main(String[] args) throws Exception {
         switch(args.length) {
             case 0: Path p = Paths.get(System.getProperty("user.home")).resolve(".martifacts");
