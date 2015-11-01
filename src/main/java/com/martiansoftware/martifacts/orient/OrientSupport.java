@@ -10,11 +10,13 @@ import com.orientechnologies.orient.core.sql.OCommandSQL;
 import com.orientechnologies.orient.core.tx.OTransaction;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,6 +146,15 @@ class OrientSupport {
 
     public List<ODocument> sql(String s, Object... args) {
         return sql(new OCommandSQL(s), args);
+    }
+    
+    public List<ODocument> sql(String s, Collection args) {
+        if (args == null) return sql(s);
+        return sql(s, args.toArray(new Object[args.size()]));
+    }
+    
+    public List <ODocument> sql(String s, Stream<? super Object> args) {
+        return sql(s, args.collect(Collectors.toCollection(java.util.ArrayList::new)));
     }
     
     public List<ODocument> sql(String s) {
