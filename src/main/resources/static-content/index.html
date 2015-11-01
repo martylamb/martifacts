@@ -132,6 +132,14 @@
                 }
             }
 
+            function tagify(t) {
+                var result = "";
+                $.each(t, function(i,v) {
+                   result = result + "<span class='tag'>"  + v + "</span> ";
+                });
+                return result;
+            }
+            
             $(function() {
                 results = $("#results").dataTable( {
                     "ajax" : {
@@ -163,7 +171,7 @@
                         },
                         { "data": function(row, type, val, meta){
                                       if (type === 'display') {
-                                          return row.tags.join(' ') + "<div class='sha1'/>sha1: " + row.sha1 + "<br/>id: " + row.id + "</div>";
+                                          return tagify(row.tags) + "<div class='sha1'/>sha1: " + row.sha1 + "<br/>id: " + row.id + "</div>";
                                       } else return row.tags;
                                   },
                           "sClass": "table-tags"
