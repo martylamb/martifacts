@@ -24,6 +24,16 @@ a, a:link, a:visited, a:hover, a:active {
     color: #0070d8;
 }
 
+.tag {
+    //margin: 0 0.1em;
+    //padding: 0.3em 0.3em;
+    margin: 0em;
+    padding: 0em;
+    color: #fff;
+    background: #999;
+    font-size: 80%;
+}
+
 #searchhelp {
     background: #1f8dd6;
     padding-left: 1em;
@@ -38,20 +48,20 @@ a, a:link, a:visited, a:hover, a:active {
 
 
 .id {
-    color: #adadad;
-    font-size: 90%;
+    color: #777;
+    font-size: 80%;
 }
 
 .sha1 {
-    color: #adadad;
-    font-size: 90%;
+    color: #777;
+    font-size: 80%;
 }
 
 .tag {
     margin: 0 0.1em;
     padding: 0.3em 1em;
     color: #fff;
-    background: #999;
+    background: rgb(28, 184, 65);
     font-size: 80%;
 }
 
