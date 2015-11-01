@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,8 +92,8 @@ class OrientBackend extends OrientSupport {
         return tx(() -> {
             if (tags.isEmpty()) return Collections.EMPTY_LIST;
             Collection<String> ntags = Tags.normalize(tags);
-            String q = "select from Tag where " + ntags.stream().map(t -> "(name = ?) ").collect(Collectors.joining("OR "));
-            return Collections.unmodifiableList(sql(q, (Object[]) ntags.toArray(new String[ntags.size()])));
+            String q = "select from Tag where " + ntags.stream().map(t -> "(name = ?) OR (name like ?)").collect(Collectors.joining("OR "));            
+            return Collections.unmodifiableList(sql(q, ntags.stream().flatMap(s -> Stream.of(s, "%:" + s)))); // e.g. find tag "version:2" for query term "2"
         });
     }
 
