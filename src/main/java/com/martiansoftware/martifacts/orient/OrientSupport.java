@@ -154,7 +154,7 @@ class OrientSupport {
     }
     
     public List <ODocument> sql(String s, Stream<? super Object> args) {
-        return sql(s, args.collect(Collectors.toCollection(java.util.ArrayList::new)));
+        return sql(s, (Collection) args.collect(Collectors.toCollection(java.util.ArrayList::new)));
     }
     
     public List<ODocument> sql(String s) {
