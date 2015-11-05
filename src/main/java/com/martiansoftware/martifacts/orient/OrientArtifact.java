@@ -1,6 +1,7 @@
 package com.martiansoftware.martifacts.orient;
 
 import com.martiansoftware.martifacts.model.Artifact;
+import com.martiansoftware.martifacts.web.AppRootHelper;
 import com.orientechnologies.orient.core.db.record.OIdentifiable;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class OrientArtifact implements Artifact {
     @Override public long size() { return _doc.field("size"); }
     @Override public Date time() { return _doc.field("time"); }
     @Override public Date timeAdded() { return _doc.field("added"); }
-    
+
     @Override public SortedSet<String> tags() {
         return _backend.tx(() -> {
             Set<OIdentifiable> tagdocs = _doc.field("tags");

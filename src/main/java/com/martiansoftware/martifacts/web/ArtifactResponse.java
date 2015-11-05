@@ -9,6 +9,7 @@ import com.martiansoftware.martifacts.model.Artifact;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -31,11 +32,18 @@ public class ArtifactResponse {
         return mt == MimeType.JSON ? json(artifacts) : text(artifacts);
     }
     
+    private Map<String, Object> asMap(Artifact a) {
+        Map<String, Object> result = a.asMap();
+        result.put("url", AppRootHelper.get().map(url -> String.format("%s/get/%s", url, a.id())).orElse(null));
+        return result;
+    }
+    
     private static BoomResponse json(Collection<Artifact> artifacts) {
-        return Boom.json(artifacts.stream().map(a -> a.asMap()).collect(Collectors.toList()));
+        return Boom.json(artifacts.stream().map(a -> new ArtifactWithUrl(a).asMap()).collect(Collectors.toList()));
     }
     
     private static BoomResponse text(Collection<Artifact> artifacts) {
-        return Boom.text(ArtifactTextFormatter.format(artifacts));
+        Collection<ArtifactWithUrl> au = artifacts.stream().map(a -> new ArtifactWithUrl(a)).collect(Collectors.toList());
+        return Boom.text(ArtifactTextFormatter.format(au));
     }
 }

@@ -1,13 +1,11 @@
 package com.martiansoftware.martifacts.web;
 
+import static com.martiansoftware.boom.Boom.before;
 import static com.martiansoftware.boom.Boom.get;
 import static com.martiansoftware.boom.Boom.post;
-import com.martiansoftware.boom.Json;
 import com.martiansoftware.martifacts.orient.OrientArtifactStore;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +37,7 @@ public class App {
         try {
             log.info("Starting server with data in {}", dataDir);
             _store = new OrientArtifactStore(dataDir);
+            before(new AppRootHelper());
             post("/add", new ArtifactAdder(_store)::add);
             get("/get/:id", new ArtifactGetter(_store)::get);
             get("/search", new ArtifactSearcher(_store)::search);
