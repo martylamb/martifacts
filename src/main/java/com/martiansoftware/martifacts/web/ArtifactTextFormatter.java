@@ -13,16 +13,17 @@ public class ArtifactTextFormatter {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     
-    private static final TableFormatter<Artifact> _formatter =
-        new TableFormatter<Artifact>()
+    private static final TableFormatter<ArtifactWithUrl> _formatter =
+        new TableFormatter<ArtifactWithUrl>()
             .left("ID", a -> a.id())
             .left("TIME", a-> sdf.format(a.time()))
             .right("SIZE", a -> String.format("%d", a.size()))
             .left("NAME", a -> a.name())
             .left("", a -> "#")
-            .left("TAGS", a -> a.tags().stream().collect(Collectors.joining(" ")));
+            .left("TAGS", a -> a.tags().stream().collect(Collectors.joining(" ")))
+            .left("URL", a -> a.url());
             
-    public static String format(Collection<Artifact> artifacts) {
+    public static String format(Collection<ArtifactWithUrl> artifacts) {
         return _formatter.format(artifacts);
     }
 }

@@ -1,5 +1,7 @@
 package com.martiansoftware.martifacts.model;
 
+import static com.martiansoftware.boom.Boom.request;
+import com.martiansoftware.martifacts.web.AppRootHelper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
